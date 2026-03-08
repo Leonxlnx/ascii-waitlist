@@ -63,6 +63,26 @@
             background-size: 200px;
         }
 
+        /* ── Video Background ── */
+        .video-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .video-bg video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-bg-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(9, 9, 11, 0.82);
+        }
+
         /* ── Ambient Glow ── */
         .glow {
             position: fixed;
@@ -72,6 +92,7 @@
             pointer-events: none;
             filter: blur(140px);
             opacity: 0.4;
+            z-index: 1;
         }
 
         .glow-1 {
@@ -90,6 +111,7 @@
         .view {
             position: absolute;
             inset: 0;
+            z-index: 2;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -489,6 +511,14 @@
 </head>
 
 <body>
+
+    <!-- Video Background -->
+    <div class="video-bg">
+        <video autoplay muted loop playsinline>
+            <source src="https://videos.pexels.com/video-files/3129671/3129671-sd_640_360_30fps.mp4" type="video/mp4" />
+        </video>
+        <div class="video-bg-overlay"></div>
+    </div>
 
     <div class="glow glow-1"></div>
     <div class="glow glow-2"></div>
