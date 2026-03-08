@@ -13,7 +13,6 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/figlet@1.7.0/lib/figlet.min.js"></script>
     <style>
         *,
         *::before,
@@ -572,19 +571,6 @@
     </div>
 
     <script>
-        /* ── Font Loading ── */
-        const FONTS_CDN = 'https://cdn.jsdelivr.net/npm/figlet@1.7.0/importable-fonts/';
-        async function loadFont(name) {
-            try {
-                const resp = await fetch(`${FONTS_CDN}${name}.js`);
-                const src = await resp.text();
-                const fn = new Function('module', src + '; return module.exports;');
-                const m = { exports: null };
-                figlet.parseFont(name, fn(m));
-            } catch (e) { console.warn('Font load failed:', e); }
-        }
-        loadFont('Doom');
-
         /* ── Submission ── */
         async function handleSubmit(e) {
             e.preventDefault();
@@ -598,13 +584,14 @@
 
             document.getElementById('greeting-name').textContent = name;
 
-            // Generate ASCII
+            // Generate ASCII via API
             try {
-                const ascii = await new Promise((resolve, reject) => {
-                    figlet.text('Hello ' + name, { font: 'Doom' }, (err, data) => {
-                        if (err) reject(err); else resolve(data);
-                    });
+                const res = await fetch('https://yourascii.vercel.app/api/text', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: 'Hello ' + name, font: 'Doom' }),
                 });
+                const ascii = await res.text();
                 document.getElementById('ascii-body').textContent = ascii;
             } catch {
                 document.getElementById('ascii-body').textContent = `Hello, ${name}!`;
